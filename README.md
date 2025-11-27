@@ -2,10 +2,10 @@
 
 ## Index
 
-- [Project 1: Dimensional reduction and clustering of multivariate dataset](01-DimensionalReduction-Clustering)  
+- [Project 1: Atmospheric Clustering Pipeline](01-Atmospheric-Clustering-Pipeline)  
   **Tools**: Python, Jupyter Notebook  
-  **Summary**: Apply PCA and K-means to identify patterns in a multivariate dataset.
+  **Summary**: Atmospheric data pipeline using PCA and k-means to identify climate regimes.
 
-- [Project 2: Logistic map bifurcation](02-LogisticMap-DataGenerator)
+- [Project 2: Logistic map bifurcation](02-Logistic-Map-Bifurcation)
   **Tools**: Python, Jupyter Notebook
   **Summary**: Computes and plot the bifurcation diagram of the logistic map.
