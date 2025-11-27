@@ -18,7 +18,7 @@ def logistic_map(x,r):
     '''
     return r*x*(1-x)
 
-def generate_data(r,filename,x0=0.1,steps=1200,last=200,):
+def generate_data(r,filename,x0=0.1,steps=1200,last=200):
     ''' 
     Write and read the last 200 values.
     '''
