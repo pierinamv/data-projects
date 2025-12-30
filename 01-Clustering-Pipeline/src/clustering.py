@@ -1,9 +1,8 @@
 import numpy as np
-import random
 
 def euclidean(vector1,vector2):
     return np.sqrt(np.sum((vector1-vector2)**2))
-def MyKmeans(matriz,n_cluster,n_init=15,max_iter=300,tol=0.0001):
+def kmeans(matriz,n_cluster,n_init=15,max_iter=300,tol=0.0001):
     k = n_cluster
     points = matriz.shape[0]
     dims = matriz.shape[1]
@@ -45,7 +44,7 @@ def MyKmeans(matriz,n_cluster,n_init=15,max_iter=300,tol=0.0001):
                 Ik[ki]=np.sum(np.sum((clusterK - inCentroids[ki])**2,axis=1),axis=0)
     
                 ck = np.mean(clusterK,axis=0)
-                if type(ck)==numpy.ndarray:
+                if type(ck)==np.ndarray:
                     Centroids[ki] = ck
         
             delta = np.abs(Ik_t0 - Ik)
