@@ -11,7 +11,6 @@ def kmeans(matriz,n_cluster,n_init=15,max_iter=300,tol=0.0001):
     #t = 0.0001
     tol = np.full(k,tol)
 
-    n_init = 15
     SelInertia = np.full(n_init,np.nan)
     SelLabels = np.full((n_init,points),np.nan)
 
