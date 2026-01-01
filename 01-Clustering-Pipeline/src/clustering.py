@@ -1,18 +1,15 @@
 import numpy as np
 
-def euclidean(vector1,vector2):
-    return np.sqrt(np.sum((vector1-vector2)**2))
 def kmeans(matriz,n_cluster,n_init=15,max_iter=300,tol=0.0001):
     k = n_cluster
-    points = matriz.shape[0]
-    dims = matriz.shape[1]
+    obs = matriz.shape[0]
+    vars = matriz.shape[1]
 
-    #max_iter=300
     #t = 0.0001
     tol = np.full(k,tol)
 
     SelInertia = np.full(n_init,np.nan)
-    SelLabels = np.full((n_init,points),np.nan)
+    SelLabels = np.full((n_init,obs),np.nan)
 
     for j in range(n_init):
 
@@ -20,31 +17,25 @@ def kmeans(matriz,n_cluster,n_init=15,max_iter=300,tol=0.0001):
         Ik_t0 = np.full(k,10000)
 
         #Inicializo centroides de forma aleatoria
-        indexCent = np.random.randint(0,points,size=k) # k indices de los centroides
-        Centroids = np.array([matriz[c] for c in indexCent])
+        Centroids = matriz[np.random.choice(obs,k,replace=False)]# k indices de los centroides
 
         it = 0
         while np.any(delta > tol) and it<max_iter:
-    
-            LABELS = np.full(points,10)
-            for i in range(matriz.shape[0]):
-                file=matriz[i]
-                dist = [euclidean(file,cent) for cent in Centroids]
-    
-                label = np.where(dist == np.min(dist))[0][0] #se selecciona el indice del cluster con la distancia mas corta de cada fila a un centroide
-                LABELS[i] = label
+              
+            dist2 =np.sum((matriz[:,None,:]-Centroids[None,:,:])**2,axis=2) #shape(obs,k,vars)
+            LABELS = np.argmin(dist2,axis=1) #shape(obs)
             #print(LABELS)
 
             #Redefinir centroides
-            inCentroids = np.copy(Centroids)
             Ik = np.arange(k)
             for ki in range(k):
-                clusterK = np.array([matriz[bbb] for bbb in np.where(LABELS == ki)[0]])
-                Ik[ki]=np.sum(np.sum((clusterK - inCentroids[ki])**2,axis=1),axis=0)
-    
-                ck = np.mean(clusterK,axis=0)
-                if type(ck)==np.ndarray:
-                    Centroids[ki] = ck
+                mask = LABELS == ki
+                if np.any(mask):
+                    Centroids[ki]=matriz[mask].mean(axis=0)
+                else:
+                    pass
+               
+            Ik = np.array([np.sum(dist2[LABELS == ki, ki]) for ki in range(k)])
         
             delta = np.abs(Ik_t0 - Ik)
             Ik_t0 = Ik
