@@ -60,6 +60,3 @@ def kmeans(matrix,n_cluster,n_init=25,max_iter=300,tol=1e-12):
     inertia=SelInertia[inBest]
     centroids = SelCentroids[inBest]            
     return labels,inertia,centroids        
-
-#Ejemplo:
-#labels,inertia,centroids = kmeans(matriz,9,n_init=10) #sugerido n_ini>15
