@@ -19,7 +19,7 @@ including:
 ## Additional Projects
 
 ### Logistic Map — Bifurcation Analysis
-➡️ [02-Logistic-Map-Bifurcation](02-Logistic-Map-Bifurcation)
+➡️ [Logistic-Map-Bifurcation](Logistic-Map-Bifurcation)
 
 Computational exploration of the logistic map, including numerical simulation
 and visualization of bifurcation diagrams.
