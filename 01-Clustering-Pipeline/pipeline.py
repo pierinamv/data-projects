@@ -28,3 +28,11 @@ from src.clustering import kmeans
 mycps,inertia,centroids=kmeans(pcs,9)
 mycps=mycps+1
 print(mycps)
+
+
+out_dir = base_dir / 'data' / 'processed'
+np.save(out_dir / 'pcs.npy', pcs)
+np.save(out_dir / 'variance.npy', var)
+np.save(out_dir / 'cps.npy', mycps)
+np.save(out_dir / 'centroids.npy', centroids)
+
