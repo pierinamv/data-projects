@@ -14,6 +14,10 @@ including:
 - custom k-means clustering implementation
 - identification and interpretation of atmospheric regimes
 
+➡️ [02-Simulation-Data-Engineering](02-Scientific-Simulation-Data-Engineering)
+
+I built a batch data pipeline that ingests raw Fortran simulation outputs, structures them into time-indexed datasets, and enables downstream analysis and visualization in Python.
+
 ---
 
 ## Additional Projects
