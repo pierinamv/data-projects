@@ -25,4 +25,3 @@ def scatter_plot(data_x,data_y,xlabel,ylabel):
 
 scatter_plot(df_sigma['time'],df_sigma['sigma'],'time','sigma')
 scatter_plot(df_sigma['time'],df_sigma['log_cmax'],'time','log_cmax')
-
