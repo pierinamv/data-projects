@@ -1,43 +1,59 @@
-import numpy as np;import pandas as pd; import matplotlib.pyplot as plt
+import numpy as np;
+import pandas as pd; 
+import matplotlib.pyplot as plt
 from pathlib import Path
 #from src import plot_dispersion_curves as pdv
-base_dir = Path.cwd()
-data_dir = base_dir/'..'/'data_experiments'
-print(base_dir)
-
-data = np.loadtxt(data_dir/'concentr_sist12acop.dat')#'diffy_taylor_limiteV.dat')
-cols = ['k','sigma','delta','v','da','db','vsr','u','t_trans','itmax','nmax','dt','dx']
-v = float(input()) #0.010,0.64,2.25
-
-def dispersion_curve(data,cols,v,ls,labelDelta=False,u=25.):
-    #global v
-    colors = plt.cm.tab10.colors
-    df = pd.DataFrame(data=data,columns=cols)
-    df1 = df[df['v']==v]
-    df1=df1[df1['u']==u]    
-    #u=df['u'].iloc[0]
-    df1 = df1.iloc[:,:3]
-    df1.head()
-    i=0
-    for delta, group in df1.groupby('delta'):
-        plt.plot(group['k'],group['sigma'],linestyle=ls,color=colors[i],alpha=0.7,linewidth=2.,label=f'{delta:.1f}')
-        i+=1
-
-#pdv.dispersion_curve(data,cols,v,'-',labelDelta=True,u=0.)
-dispersion_curve(data,cols,v,'--',labelDelta=True,u=25.)
-#plt.axhline(0,linestyle='--',linewidth=0.45,color='black')
-plt.legend()
-plt.xlim(0,0.5);plt.ylim(-0.005,0.005)
-#plt.xlabel('k');plt.ylabel('sigma')
-#plt.title(fr'Curvas de dispersión con $\frac{{v^{2}}}{{8u}}$={(v**2)/(8*u):.3f}')
+base_dir=Path(__file__).resolve().parent.parent
+dataexp_dir = Path(base_dir/'data_experiments')
 
 #Figura2 Llamoca et al.
-database = np.loadtxt(data_dir/'k_sig_gen.dat')
-colss = ['k','sigma','delta','da','db','t_trans','itmax','nmax','dt','dx']
-df = pd.DataFrame(data=database,columns=colss)
-df['delta'] = df['delta'].round(1)
-df = df[df['delta'].isin([1.,2.,3.,5.,7.])]
-dfb = df.iloc[:,:3].copy()
-plt.scatter(dfb['k'],dfb['sigma'],s=5,color='black',linestyle='-')
+def dispcurve_1layer():
+    data1layer = Path(dataexp_dir/'k_sig_gen.dat')
+    cols = ['k','sigma','delta','da','db','t_trans','itmax','nmax','dt','dx']
+    df = pd.read_csv(data1layer,
+            sep='\s+',
+            header=None,
+            comment='#',
+            names=cols
+            )
+    df['delta'] = df['delta'].round(1)
+    df = df[df['delta'].isin([1.,2.,3.,5.,7.])]
+    dfb = df.loc[:,['k','sigma','delta']].copy()
+    plt.scatter(dfb['k'],dfb['sigma'],s=5,color='black',linestyle='-')
 
-plt.show()
+def plot_dc(df,fixed_label='v',fvalue=20,groupby_label='delta',u=25,dc1layer=False):
+    colors = plt.cm.tab10.colors
+    df1=df[df['u']==u]
+    df1=df1[df1[fixed_label]==fvalue]
+    df1 = df1.loc[:,['k','sigma','delta','v']]
+    if fixed_label=='delta':
+        #df1 = df1[df1['v'].isin([50.,80.,90.,100.,200.,300.,500.])]
+        pass
+    if dc1layer == True:
+        dispcurve_1layer()
+    for i,(groupby,group) in enumerate(df1.groupby(groupby_label)):
+        plt.plot(group['k'],group['sigma'],
+                 linestyle='-',color=colors[i],
+                 alpha=0.7,linewidth=2.,
+                 label=f'{groupby:.1f}')
+    
+    plt.xlabel('k');plt.ylabel('sigma')
+    plt.grid()
+    plt.legend(title=rf'${groupby_label}$', loc='lower right')
+    plt.xlim(0,0.25);plt.ylim(-0.005,0.005)
+    plt.title(f'Dispersion curve for {fixed_label}={fvalue:.1f}')
+    plt.show()
+
+data_dir=Path(dataexp_dir/'concentr_sist12acop.dat')
+cols = ['k','sigma','delta','v','da',
+        'db','vsr','u','t_trans','itmax',
+        'nmax','dt','dx']
+df = pd.read_csv(data_dir,
+            sep='\s+',
+            header=None,
+            comment='#',
+            names=cols
+            )
+
+plot_dc(df,fixed_label='delta',fvalue=0.3,groupby_label='v',dc1layer=True)     
+#plot_dc(df,fixed_label='v',fvalue=100,groupby_label='delta',dc1layer=True)

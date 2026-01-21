@@ -1,7 +1,8 @@
 import pandas as pd
 from pathlib import Path
-base=Path.cwd()
-filesigma=base/'..'/'data_temporal'/'sigma.dat'
+
+base_dir=Path(__file__).resolve().parent.parent
+filesigma=Path(base_dir/'data_temporal'/'sigma.dat')
 df_sigma=pd.read_csv(
     filesigma,
     header=None,
