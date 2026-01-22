@@ -33,7 +33,7 @@ def select_vars(df,time,vars=['a0','b0'],layers=['l1']):
     df=df[df['time'].isin(time)][cols]
     return df
 
-df2=select_vars(df2,[149,299,599],['a0','b0'],['l1'])
+df2=select_vars(df2,[49,299],['a0','b0'],['l1'])
 
 nvars=df2.columns.shape[0]-2
 nt=df2['time'].nunique()
