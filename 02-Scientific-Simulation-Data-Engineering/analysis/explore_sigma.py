@@ -6,7 +6,7 @@ filesigma=Path(base_dir/'data_temporal'/'sigma.dat')
 df_sigma=pd.read_csv(
     filesigma,
     header=None,
-    sep='\s+',
+    sep=r'\s+',
     names=['time','sigma','log_cmax'])
 
 import matplotlib.pyplot as plt
