@@ -1,6 +1,6 @@
 #Data
 data/
-*.nc
+#*.nc
 *.pkl
 
 # Byte-compiled / optimized / DLL files
