@@ -444,7 +444,7 @@ def plot_case(
         U[::step, ::step],
         V[::step, ::step],
         color="black",
-        scale=None,
+        scale=50,
         width=0.0025
     )
 
@@ -457,12 +457,12 @@ def plot_case(
     fig.colorbar(
         cf,
         ax=ax,
-        label="IVT magnitude difference "
+        label="VIMF magnitude difference "
               "(kg m$^{-1}$ s$^{-1}$)"
     )
 
     ax.set_title(
-        "IVT magnitude difference"
+        "VIMF magnitude difference"
     )
 
     # --------------------------------------------------------
@@ -491,11 +491,11 @@ def plot_case(
     fig.colorbar(
         cf,
         ax=ax,
-        label="MFC difference (kg m$^{-2}$ s$^{-1}$)"
+        label="VIMFC difference (kg m$^{-2}$ s$^{-1}$)"
     )
 
     ax.set_title(
-        "Moisture-flux convergence difference"
+        "Vertical INtegrated Moisture-flux convergence difference"
     )
 
     # --------------------------------------------------------
@@ -552,17 +552,52 @@ def save_composites(
 ):
 
     name = f"{season}_{phase.replace(' ', '_')}"
+    
+    #Merge the three composites datasets
+    output = xr.merge([
+           target.rename({
+               var:f"{var}_drought"
+               for var in target.data_vars
+               })
+           ,
+           reference.rename({
+               var:f"{var}_reference"
+               for var in reference.data_vars
+               })
+           ,
+           anomaly.rename({
+               var:f"{var}_difference"
+               for var in anomaly.data_vars
+               })
+        ])
 
-    output = xr.Dataset({
-        "drought_composite": target,
-        "enso_reference": reference,
-        "difference": anomaly
-    })
+    #Save metadata
+    output.attrs.update({
+        "season":season,
+        "enso-phase":phase,
+        "reference":REFERENCE,
+        "drought_threshold":DROUGHT_THRESHOLD,
+        "enso_threshold":ENSO_THRESHOLD,
+        "description":(
+            "Seasonal moisture flux copmosites."
+            "Difference = drought composite - "
+            "ENSO reference composite."
+            )
+        })
+    
+  
+    #output = xr.Dataset({
+    #    "drought_composite": target,
+    #    "enso_reference": reference,
+    #    "difference": anomaly
+    #})
 
     output.to_netcdf(
         COMP_DIR / f"{name}_composites.nc"
     )
-
+    
+    print(f"Composites saved: {name}_composites.nc")
+    
 
 # ============================================================
 # 8. MAIN
