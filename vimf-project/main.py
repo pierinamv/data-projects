@@ -444,7 +444,7 @@ def plot_case(
         U[::step, ::step],
         V[::step, ::step],
         color="black",
-        scale=50,
+        scale=100,
         width=0.0025
     )
 
